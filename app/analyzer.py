@@ -12,7 +12,7 @@ class Markov:
                 _new[word] = 0
             _new[word] += 1
         for key, item in _new.items():
-            _new[key] = round(_new[key] / len(_new), 4)
+            _new[key] = round(_new[key] / len(dic), 4)
 
         return _new
 
@@ -51,18 +51,19 @@ class Markov:
             print(next, 'was not found after', curr)
         
         return u_prev + u_next
+
 def print_stats(word, dic):
     assert word in dic
     print('Looking for', word)
     print('Occurences before:')
     for key, val in dic[word][0].items():
-        print('\t', key, str(round(val * 100, 2)) + '%')
+        print('\t', key, str(val * 100) + '%')
     print('Occurences after:')
     for key, val in dic[word][1].items():
         print('\t', key, str(round(val * 100, 2)) + '%')
 
-mar = Markov('sample.txt')
-print_stats('english', mar.m_dict)
-print()
-print('good english words', mar.usage('good', 'english', 'words'))
-print('the english language:', mar.usage('the', 'english', 'language'))
+mar = Markov('essay.txt')
+print_stats('understand', mar.m_dict)
+
+print('should understand me', mar.usage('should', 'understand', 'me'))
+print('should explain me', mar.usage('should', 'explain', 'me'))
