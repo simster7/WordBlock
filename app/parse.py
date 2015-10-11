@@ -31,7 +31,7 @@ def iter_parse(querystr):
 # Breadth first search to level of "depth"
 # max_searches caps the number queries per page
 def depth_parse(querystr, depth, max_searches):
-    count = 0
+    count = 0 
     text_list = []
     visited = set()
     # list of tuples
