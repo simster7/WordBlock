@@ -27,7 +27,7 @@ class SubjectContext:
         """
         Gather data from Wikipedia based on user-inputed SUBJECT. 
         """
-        text_list, visited, queue = [], set(), list() 
+        text_list, visited, visitedSeeAlso, queue = [], set(), set(), list() 
         queue.append((self.subject, self.depth))
 
         while len(queue) > 0:
@@ -43,16 +43,16 @@ class SubjectContext:
                 pass
 
         queue.append((self.subject, self.depth))
-
         while len(queue) > 0: 
             next = queue.pop(0)
             try: 
-                if next[0] not in visited and next[1] >= 0: 
-                    visited.add(next[0])
+
+                if next[0] not in visitedSeeAlso and next[1] >= 0: 
+                    visitedSeeAlso.add(next[0])
                     page = wikipedia.page(next[0])
-                    for reference in page.section("See Also"):
+                    for reference in page.section("See also").splitlines():
                         queue.append((reference, next[1] -1))
-                    text_list.extend(wikipedia.page(next[0].content.split())) 
+                    text_list.extend(wikipedia.page(next[0]).content.split())
             except:
                 pass              
         return text_list
