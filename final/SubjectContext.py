@@ -27,7 +27,7 @@ class SubjectContext:
         """
         Gather data from Wikipedia based on user-inputed SUBJECT. 
         """
-        count, text_list, visited, queue = 0, [], set(), list() 
+        text_list, visited, queue = [], set(), list() 
         queue.append((self.subject, self.depth))
 
         while len(queue) > 0:
@@ -37,13 +37,25 @@ class SubjectContext:
                     visited.add(next[0])
                     results = wikipedia.search(next[0], self.max_searches, False)
                     for pagename in results:
-                        queue.append((pagename, next[1]-1))
+                        queue.append((pagename, next[1]-1)) 
                     text_list.extend(wikipedia.page(next[0]).content.split())
-                    count+=1
             except:
                 pass
 
-        return text_list 
+        queue.append((self.subject, self.depth))
+
+        while len(queue) > 0: 
+            next = queue.pop(0)
+            try: 
+                if next[0] not in visited and next[1] >= 0: 
+                    visited.add(next[0])
+                    page = wikipedia.page(next[0])
+                    for reference in page.section("See Also"):
+                        queue.append((reference, next[1] -1))
+                    text_list.extend(wikipedia.page(next[0].content.split())) 
+            except:
+                pass              
+        return text_list
      
     def get_thesaurus(self, word):
         """
