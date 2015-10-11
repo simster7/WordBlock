@@ -11,6 +11,9 @@ class SubjectContext:
         that conext before, load it. Otherwise, gather context data from Wikipedia
         using specified DEPTH and MAX_SEARCHES.
         """
+        assert type(depth) == int, 'depth must be an int'
+        assert type(max_searches) == int, 'max_searches must be an int'
+
         self.subject = subject
         self.depth = depth
         self.max_searches = max_searches
