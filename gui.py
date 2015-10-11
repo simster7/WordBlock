@@ -36,12 +36,10 @@ class App:
         def search(context, word):
             subject = sc.SubjectContext(context)
             optimal, secondary = subject.get(word)
-            print('hi')
             self.opt_w.delete('1.0', END)
             self.opt_w.insert(END, '\n'+'\n'.join(optimal))
             self.sec_w.delete('1.0', END)
             self.sec_w.insert(END, '\n'+'\n'.join(secondary))
-            print('done')
 
         self.find = Button(frame, text="Fuck", command=lambda: search(self.sub.get(), self.rep.get()))
         self.find.grid(row=1, column=2)
