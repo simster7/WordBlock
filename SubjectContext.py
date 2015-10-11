@@ -83,19 +83,31 @@ class SubjectContext:
         those whose synonyms are used in context within our dataset. Secondary replacements
         are not necesiraly used in context, but are used individually within our dataset.
         """
-        optimal, secondary = [], []
+        optimal, secondary, visited = [], [], []
         extended_syn, basic_syn = self.get_thesaurus(word)
 
         context = nltk.ContextIndex(self.data_list)
         text = nltk.Text(self.data_list)
         candidates = context.similar_words(word, n=10000)
 
-        optimal = [word for word in candidates if word in extended_syn]
+        print('Optimal:\n')
+        for word in candidates: 
+            if word in extended_syn and word not in visited: 
+                optimal.append(word)
+                visited.append(word)
+                print(word)
+        print('\n')
 
-        print('Optimal:\n', optimal)
-        secondary = [[word, text.count(word)] for word in basic_syn]
+        #print('Optimal:\n', optimal)
+        print('Secondary:\n')
 
-        secondary = [t[0] for t in list(reversed(sorted(secondary, key =lambda x: x[1])))]
-        print('Secondary:\n', secondary)
+        secondary_list = [[word, text.count(word)] for word in basic_syn]
+        secondary_list = [t[0] for t in list(reversed(sorted(secondary_list, key =lambda x: x[1])))]
+        for word in secondary_list: 
+            if word not in visited: 
+                secondary.append(word)
+                visited.append(word)
+                print(word)
+        print('\n')
 
         return optimal, secondary
