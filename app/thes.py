@@ -1,6 +1,6 @@
 import urllib.request, re
 
-def get_synonims(word):
+def get_synonyms(word):
     opener = urllib.request.build_opener()
     
     html = opener.open('http://www.thesaurus.com/browse/' + word).read(100000).decode(encoding='utf-8', errors='replace')
@@ -11,5 +11,5 @@ def get_synonims(word):
     return synonyms_a + synonyms_b
     
 
-get_synonims('understand')
+
 
