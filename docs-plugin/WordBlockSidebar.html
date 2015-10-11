@@ -1,0 +1,49 @@
+<!-- Use this CSS stylesheet to ensure that add-ons styling 
+     matches the default Google Docs styles -->
+<link href="https://ssl.gstatic.com/docs/script/css/add-ons.css"
+     rel="stylesheet"> 
+ 
+<!-- The sidebar will have a input box and the search button -->
+<div class="sidebar">
+    
+    <!-- The query box for WordBlock -->
+    <div class="block form-group">
+        <input type="text" id="topic" placeholder="Enter the topic.. " />
+        <input type="text" id="word" placeholder="Enter a word.. " />
+        <br> <br>
+        <button class="blue" id="word_find">Find me a word</button>
+    </div>
+    
+    <!-- The container for the Google Maps static image -->
+    <div id='output'></div>
+ 
+</div>
+ 
+<!-- Load the jQuery library from the Google CDN -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js">
+</script>
+ 
+<script>
+ // Attach click handlers after the Sidebar has loaded in Google Docs
+ $(function() {
+   
+   $('#word_find').click(function() {
+     var url = URL
+     var output $.get(
+       url,
+       {topic : $('#topic').val(), word : $('#word').val()},
+       function(data) {
+         alert('words found: ' + data);
+     })
+     $('#output').html('<textarea src=" ' + output + ' "/>');
+   }
+   
+   $('#word').keyup(function(e) {
+      if (e.keyCode === 13) {
+         $('#word_find').click();
+      }
+   });
+   
+ });
+ 
+</script>
