@@ -57,5 +57,5 @@ def handle_invalid_usage(error):
     response.status_code = error.status_code
     return response
 
-if __name__ == '__main__':g
+if __name__ == '__main__':
     app.run(host='0.0.0.0',port=int(os.environ.get('PORT',5000)))
