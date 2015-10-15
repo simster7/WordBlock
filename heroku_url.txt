@@ -1,2 +1,0 @@
-https://young-lowlands-8916.herokuapp.com/?topic=null&word=null&maxnum=0
-Fill in the missing fields
