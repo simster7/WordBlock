@@ -1,3 +1,4 @@
+<html>
 <!-- Use this CSS stylesheet to ensure that add-ons styling 
      matches the default Google Docs styles -->
 <link href="https://ssl.gstatic.com/docs/script/css/add-ons.css"
@@ -10,8 +11,9 @@
     <div class="block form-group">
         <input type="text" id="topic" placeholder="Enter the topic.. " />
         <input type="text" id="word" placeholder="Enter a word.. " />
+        <input type="number" id="maxnum" placeholder="Enter max number.. "/>
         <br> <br>
-        <button class="blue" id="word_find">Find me a word</button>
+        <button class="blue" id="word_find" onclick="a()">Find me a word</button>
     </div>
     
     <!-- The container for the Google Maps static image -->
@@ -25,25 +27,43 @@
  
 <script>
  // Attach click handlers after the Sidebar has loaded in Google Docs
- $(function() {
-   
-   $('#word_find').click(function() {
-     var url = URL
-     var output $.get(
-       url,
-       {topic : $('#topic').val(), word : $('#word').val()},
-       function(data) {
-         alert('words found: ' + data);
-     })
-     $('#output').html('<textarea src=" ' + output + ' "/>');
-   }
-   
-   $('#word').keyup(function(e) {
-      if (e.keyCode === 13) {
-         $('#word_find').click();
+ function a() {
+   var url = "https://young-lowlands-8916.herokuapp.com";
+   var params = 
+     {
+     topic : $('#topic').val(),
+     word : $('#word').val(), 
+     maxnum: $('#maxnum').val()
+     }
+   var topic = $('#topic').val();
+   var word = $('#word').val();
+   var maxnum = $('#maxnum').val();
+   var comp_url = url+"?topic="+topic+"&word="+word+"&maxnum="+maxnum;
+   var HttpClient = function() {
+    this.get = function(aUrl, aCallback) {
+        var anHttpRequest = new XMLHttpRequest();
+        anHttpRequest.onreadystatechange = function() { 
+            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                aCallback(anHttpRequest.responseText);
+        }
+
+        anHttpRequest.open( "GET", aUrl, true );            
+        anHttpRequest.send(null);
       }
+    }
+    var aClient = new HttpClient();
+    aClient.get(comp_url, function(response) {
+       console.log(response)
+       $('#output').append('<textarea>'  + response + '</textarea>');
    });
-   
- });
+ }; 
+ $(DocumentApp).ready(a);
+   //$('#word').keyup(function(e) {
+   //   if (e.keyCode === 13) {
+   //      $('#word_find').click();
+   //   }
+   //}); 
+
  
 </script>
+</html>
