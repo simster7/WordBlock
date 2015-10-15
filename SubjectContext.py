@@ -18,7 +18,7 @@ class SubjectContext:
         self.depth = depth
         self.max_searches = max_searches
 
-        fileName = self.subject + '-' + str(self.depth) + '-' + str(self.max_searches) + '.wbdat'
+        fileName = './data/' + self.subject + '-' + str(self.depth) + '-' + str(self.max_searches) + '.wbdat'
         if (os.path.isfile(fileName)):
             self.data_list = pickle.load(open(fileName, 'rb'))
         else:
@@ -71,7 +71,10 @@ class SubjectContext:
         
         html = opener.open('http://www.thesaurus.com/browse/' + word).read(100000).\
                 decode(encoding='utf-8', errors='replace')
-        
+
+        antonym_index = html.index('<section class="container-info antonyms">')
+        html = html[:antonym_index] + html[html.index('</section>', antonym_index)]
+                   
         synonyms_a = re.findall(r'<span class="text">([a-z\ ]+)<\/span>', html)
         synonyms_b = re.findall(r'<a href="[^\"]+">\n([a-z\ ]+)<\/a>', html)
 
