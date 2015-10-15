@@ -1,2 +1,2 @@
-https://young-lowlands-8916.herokuapp.com/?topic=null&word=null&maxnum=0
-Fill in the missing fields
+OLD URL (set to redirect): https://young-lowlands-8916.herokuapp.com/
+NEW URL: http://subject-context.herokuapp.com/
