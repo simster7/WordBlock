@@ -87,7 +87,9 @@ class SubjectContext:
         are not necesiraly used in context, but are used individually within our dataset.
         """
         optimal, secondary, visited = [], [], []
+        print('thes')
         extended_syn, basic_syn = self.get_thesaurus(word)
+        print('donethes')
 
         context = nltk.ContextIndex(self.data_list)
         text = nltk.Text(self.data_list)

@@ -11,30 +11,15 @@ def home_page():
     return app.send_static_file("index.html")
 
 #For use by standalone web app
-@app.route('/results', methods=['POST'])
-def post_results():
-    topic = request.form["topic"]
-    word = request.form["word"]
+
+@app.route('/<param>')
+def post_results(param):
+    topic = param[:param.index('-')]
+    word = param[param.index('-') + 1:]
     context = SubjectContext(topic)
     syn = context.get(word)
     return render_template("result.html", topic=topic, word=word, primary=json.dumps(syn[0]), secondary = json.dumps(syn[1]))
 
-#For use by Docs plugin
-@app.route('/setsubject', methods=['POST'])
-def set_subject():
-    arg = request.form['subject']
-    subject = SubjectContext(arg)
-    return "Subject set: "+arg
-
-#For use by Docs plugin
-@app.route('/getquery', methods=['GET'])
-def find_synonyms():
-    print(subject)
-    word = request.args['word']
-    if subject:
-        return json.dumps(subject.get(word))
-    else:
-        raise InvalidUsage("Subject not yet defined. ")
 
 class InvalidUsage(Exception):
     status_code = 403

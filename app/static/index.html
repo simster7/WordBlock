@@ -1,20 +1,109 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Subject Context</title>
-    </head>
-    <body>
-        <h1> Subject Context </h1>
-        <br>
-        <form action = "/results" method = "post">
-            <label for = "POST-TOPIC">Topic:</label>
-            <input id = "POST-TOPIC" type = "text" name = "topic">
-            <label for = "POST-WORD">Word:</label>
-            <input id = "POST-WORD" type = "text" name = "word">
-            <input type = "submit" value = "Save">
-        </form>
-        <div>
-        </div>
-    </body>
-</html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
 
+    $(document).ready(function(){
+
+        $('#go').click(function(e) {  
+            var inputvalue = $("#sub").val() + '-' + $("#wrd").val();
+            window.location.replace("/"+inputvalue);
+
+        });
+    });
+    </script>
+    <style>
+
+        div.flexbox {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            overflow: hidden;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+        div.panel-wizard {
+            flex: 1 1 auto;
+        }
+        .row .col-md-3 {
+            padding-left: 0;
+            padding-right:0;
+        }
+
+        .jumbotron {
+            border-style: solid;
+            border-width: thin;
+            border-color: #C8C8C8;
+
+            background-color: #E8E8E8;
+        }
+
+    </style>
+</head>
+<body>
+
+<br>
+<br>
+<br>
+<nav class="navbar navbar-default col-md-8 col-md-offset-2">
+    <div class="navbar-header"> <a class="navbar-brand" href="#">Smart Thesaurus</a>
+
+    </div>
+    <div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#">Search</a>
+
+            </li>
+            <li><a href="#">About</a>
+
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="container-fluid">
+    <div class="jumbotron col-md-8 col-md-offset-2">
+    <div class="row">
+        <div class="form-group col-md-2 col-md-offset-3">
+            <label for="usr">Subject:</label>
+        </div>
+        <div class="form-group col-md-3">
+            <input type="text" class="form-control" id="sub">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-2 col-md-offset-3">
+            <label for="usr">Word to replace:</label>
+        </div>
+        <div class="form-group col-md-3">
+            <input type="text" class="form-control" id="wrd">
+        </div>
+        <div class="form-group col-md-1">
+            <input id='go' type="submit" class="btn btn-info" value="Search!">
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-success col-md-3 col-md-offset-3">
+            <div class="panel-heading">Optimal Words:</div>
+            <div class="panel-body"></div>
+        </div>
+        <div class="panel panel-info col-md-3">
+            <div class="panel-heading">Secondary Words:</div>
+            <div class="panel-body"></div>
+        </div>
+    </div>
+    </div>
+</div>
+
+</body>
+</html>
