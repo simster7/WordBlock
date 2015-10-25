@@ -72,8 +72,11 @@ class SubjectContext:
         html = opener.open('http://www.thesaurus.com/browse/' + word).read(100000).\
                 decode(encoding='utf-8', errors='replace')
 
-        antonym_index = html.index('<section class="container-info antonyms">')
-        html = html[:antonym_index] + html[html.index('</section>', antonym_index)]
+        try:
+            antonym_index = html.index('<section class="container-info antonyms">')
+            html = html[:antonym_index] + html[html.index('</section>', antonym_index)]
+        except:
+            pass
                    
         synonyms_a = re.findall(r'<span class="text">([a-z\ ]+)<\/span>', html)
         synonyms_b = re.findall(r'<a href="[^\"]+">\n([a-z\ ]+)<\/a>', html)
