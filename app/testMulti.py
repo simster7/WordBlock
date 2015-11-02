@@ -1,3 +1,5 @@
+import threading
+import logging
 import nltk, re, os.path, pickle, wikipedia, urllib
 
 class SubjectContext:
@@ -5,7 +7,7 @@ class SubjectContext:
     A Context for deriving synonyms of a specified word
     """
     
-    def __init__(self, subject, depth=2, max_searches=5):
+    def __init__(self, subject, depth=3, max_searches=5):
         """
         Initialize SubjectContext with a specific context. If we have already used
         that conext before, load it. Otherwise, gather context data from Wikipedia
@@ -30,34 +32,63 @@ class SubjectContext:
         """
         Gather data from Wikipedia based on user-inputed SUBJECT. 
         """
-        text_list, visited, visitedSeeAlso, queue = [], set(), set(), list() 
-        queue.append((self.subject, self.depth))
+        print("derp")
+        text_list, visited, q = [], set(), list()
+        q.append(self.subject)
 
-        while len(queue) > 0:
-            next = queue.pop(0)
+        depth_counter = 0
+
+        def search_worker(query):
+            print("Starting query, depth is ", depth_counter)
             try:
-                if next[0] not in visited and next[1] >= 0:
-                    visited.add(next[0])
-                    results = wikipedia.search(next[0], self.max_searches, False)
-                    for pagename in results:
-                        queue.append((pagename, next[1]-1))
-                    text_list.extend(wikipedia.page(next[0]).content.split())
+                visited.add(query)
+                text = wikipedia.page(query).content
+                text_list.extend(text.split())
+                next_queries = wikipedia.search(query, self.max_searches, False)
+                for pagename in next_queries:
+                    if pagename not in visited:
+                        q.append(pagename)
             except:
                 pass
 
-        queue.append((self.subject, self.depth))
-        while len(queue) > 0: 
-            next = queue.pop(0)
-            try: 
+        while (depth_counter <= self.depth):
+            thread_list = []
+            for query in q:
+                t = threading.Thread(target=search_worker, args=(query,))
+                t.start()
+                thread_list.append(t)
+            for thread in thread_list:
+                t.join()
+            depth_counter+=1
 
-                if next[0] not in visitedSeeAlso and next[1] >= 0: 
-                    visitedSeeAlso.add(next[0])
-                    page = wikipedia.page(next[0])
-                    for reference in page.section("See also").splitlines():
-                        queue.append((reference, next[1] -1))
-                    text_list.extend(wikipedia.page(next[0]).content.split())
+        q = list()
+        q.append(self.subject)
+
+        depth_counter = 0
+
+        def see_also_worker(query):
+            print("Starting query, depth is ", depth_counter)
+            try:
+                visited.add(query)
+                page = wikipedia.page(query)
+                text_list.extend(text.content.split())
+                next_queries = page.section("See also").splitlines()
+                for pagename in next_queries:
+                    if pagename not in visited:
+                        q.append(pagename)
             except:
-                pass          
+                pass
+
+        while (depth_counter <= self.depth):
+            thread_list = []
+            for query in q:
+                t = threading.Thread(target=see_also_worker, args=(query,))
+                t.start()
+                thread_list.append(t)
+            for thread in thread_list:
+                t.join()
+            depth_counter+=1
+        print(text_list[0:20])
         return text_list
      
     def get_thesaurus(self, word):
@@ -71,11 +102,13 @@ class SubjectContext:
         
         html = opener.open('http://www.thesaurus.com/browse/' + word).read(100000).\
                 decode(encoding='utf-8', errors='replace')
+
         try:
             antonym_index = html.index('<section class="container-info antonyms">')
             html = html[:antonym_index] + html[html.index('</section>', antonym_index)]
         except:
-            pass           
+            pass 
+                   
         synonyms_a = re.findall(r'<span class="text">([a-z\ ]+)<\/span>', html)
         synonyms_b = re.findall(r'<a href="[^\"]+">\n([a-z\ ]+)<\/a>', html)
 
@@ -117,7 +150,3 @@ class SubjectContext:
         print('\n')
 
         return optimal, secondary
-
-print("Finding context: Organic Chemistry")
-chem = SubjectContext("Organic Chemistry")
-#chem.get("force")
