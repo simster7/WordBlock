@@ -8,7 +8,7 @@ subject = None
 #for now, results display on a second page
 @app.route('/')
 def home_page():
-    return app.send_static_file("index.html")
+    return app.send_static_file("main.html")
 
 #For use by standalone web app
 
