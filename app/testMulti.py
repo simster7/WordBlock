@@ -1,5 +1,4 @@
 import threading
-import logging
 import nltk, re, os.path, pickle, wikipedia, urllib
 
 class SubjectContext:
@@ -40,16 +39,13 @@ class SubjectContext:
 
         def search_worker(query):
             print("Starting query, depth is ", depth_counter)
-            try:
-                visited.add(query)
-                text = wikipedia.page(query).content
-                text_list.extend(text.split())
-                next_queries = wikipedia.search(query, self.max_searches, False)
-                for pagename in next_queries:
-                    if pagename not in visited:
-                        q.append(pagename)
-            except:
-                pass
+            visited.add(query)
+            text = wikipedia.page(query).content
+            text_list.extend(text.split())
+            next_queries = wikipedia.search(query, self.max_searches, False)
+            for pagename in next_queries:
+                if pagename not in visited:
+                    q.append(pagename)
 
         while (depth_counter <= self.depth):
             thread_list = []
